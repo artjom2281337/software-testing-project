@@ -17,18 +17,30 @@ Handle cookies and switch to english
 Test “Latest News” section articles
     Sleep    3s    # waiting for page to load
 
-    # selecting info button
-    ${info_button_identifier}=    Set Variable    xpath=//button[@class="wp-block-button__link wp-element-button em-radiobutton-select"]
-    Scroll Element Into View    ${info_button_identifier}
-    Click Button    ${info_button_identifier}
+    # targeting the buttons through the mutual youngest(?) parent
+    ${parent_relative_buttons_location}=    Set Variable    xpath=//div[@class="wp-block-buttons em-radiobutton-select__buttons"]/div/div/button
+    ${buttons}=    Get WebElements    ${parent_relative_buttons_location}
 
-    # targeting first the article container, then selecting first article link.
-    # the xpath index starts from 1, not 0.
-    ${info_article_container}=    Set Variable    div[@id="overflow-slider-1"]
-    Wait Until Element Is Visible    xpath=(//${info_article_container}//article)[1]
-    Click Element                    xpath=(//${info_article_container}//article)[1]
-    Page Should Contain    Make the Most of Your Time at HAMK – Join HAMKO and Your Campus Association!
-    Go Back
+    # testing each button through loop
+    FOR    ${button}    IN    @{buttons}
+        Sleep    2s
+        Scroll Element Into View    ${button}
+        Click Button    ${button}
+
+        # save variable to confirm
+        ${button_text}=    Get Text    ${button}
+        Log To Console    ${button_text}
+        
+        # targeting first the article container, then selecting first article link.
+        # the xpath index starts from 1, not 0.
+        ${article_container}=    Set Variable    div[@id="overflow-slider-1"]
+        Wait Until Element Is Visible    xpath=(//${article_container}//article)[1]
+        Click Element    xpath=(//${article_container}//article)[1]
+        
+        Page Should Contain    ${button_text}
+        Go Back
+    END
+    
     
 Test search feature from main page: "services"
     Sleep    3s
