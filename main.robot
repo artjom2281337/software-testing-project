@@ -1,10 +1,12 @@
 *** Settings ***
 Library    SeleniumLibrary
 Suite Setup    Open browser and go to hamk.fi
+
 *** Keywords ***
 Open browser and go to hamk.fi
     Open Browser    https://www.hamk.fi/    chrome
     Maximize Browser Window
+
 *** Test Cases ***
 Handle cookies and switch to english
     Sleep    3s
@@ -28,3 +30,37 @@ Test “Latest News” section articles
     Page Should Contain    Make the Most of Your Time at HAMK – Join HAMKO and Your Campus Association!
     Go Back
     
+Test search feature from main page: "services"
+    Sleep    3s
+
+    # search button is targeted through its class.
+    # this script does not work unless viewport is on most top. js command is necessary, otherwise the test fails.
+    ${search_button_identifier}=    Set Variable    xpath=//button[@class="search-toggle js-search-open"]
+    Execute JavaScript    window.scrollTo(0, 0);    # https://stackoverflow.com/questions/1144805/scroll-to-the-top-of-the-page-using-javascript
+    Wait Until Element Is Visible    ${search_button_identifier}    10s
+    Click Element    ${search_button_identifier}
+
+    # wait animation
+    Sleep    1s
+
+    # entering input by targeting search input id
+    ${search_input_id}=    Set Variable    site-search-input
+    ${SEARCH_INPUT}=    Set Variable    services
+    Input Text    id=${search_input_id}    ${SEARCH_INPUT}
+
+    # wait for results to load
+    Sleep    10s
+
+    # targeting first result and storing its variable
+    # the element tree goes as:
+    # div > article > div > h3 > a
+    ${first_result}=    Set Variable    xpath=//div[contains(@class,"site-search-results__items")]/article[1]
+    ${first_result_title}=    Get Text    ${first_result}//h3/a
+    
+    Click Element    ${first_result}
+
+    # checking if its related page
+    Sleep    3s
+    Page Should Contain    ${first_result_title}
+    
+
