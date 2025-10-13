@@ -14,6 +14,7 @@ Handle cookies and switch to english
 
     Sleep    1s
     Click Button    xpath=//button[text()="Allow all cookies"]
+    
 Test “Latest News” section articles
     Sleep    3s    # waiting for page to load
 
