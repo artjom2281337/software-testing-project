@@ -195,7 +195,7 @@ Test screenshot of the first picture in article
     File Should Exist    screenshots/element_screenshot.png
 
 Test navigation to contact page
-    Go to hamk homepage
+    Scroll Element Into View    xpath=//div[@class="navigation-bar__logo"]
     Sleep    2s
     Click Element    xpath=//div[@class="header-menu-desktop"]/ul/li[5]
     Wait Until Element Is Visible    xpath=//ul[@class="sub-menu is-open"]/li[5]
