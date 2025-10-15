@@ -193,3 +193,24 @@ Test screenshot of the first picture in article
     END
     Capture Element Screenshot    ${img}    screenshots/element_screenshot.png
     File Should Exist    screenshots/element_screenshot.png
+
+Test navigation to contact page
+    Go to hamk homepage
+    Sleep    2s
+    Click Element    xpath=//div[@class="header-menu-desktop"]/ul/li[5]
+    Wait Until Element Is Visible    xpath=//ul[@class="sub-menu is-open"]/li[5]
+    Click Element    xpath=//ul[@class="sub-menu is-open"]/li[5]
+
+    Sleep    2s
+    Click Element    xpath=//div[@class="wp-block-button"]/a
+
+    Sleep    5s
+    Scroll Element Into View    xpath=//div[@class="em-block-contact-feed__app"]
+    Input Text    xpath=//div[@class="em-block-contact-feed__app"]/div[1]/div[1]/div[1]/div[2]/input    Jawad Yasin
+    Sleep    3s
+    Scroll Element Into View    xpath=//div[@class="wp-block-button is-style-outline"]
+    Click Element    xpath=//div[@class="wp-block-button is-style-outline"]/a
+
+    Sleep    2s
+    ${lecturer_name}=    Get Text    xpath=//div[@class="wp-block-column"]/h1
+    Should Be Equal    ${lecturer_name}    Jawad Yasin
