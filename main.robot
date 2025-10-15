@@ -31,28 +31,98 @@ Test “Latest News” section articles
     Sleep    3s    # waiting for page to load
 
     # targeting the buttons through the mutual youngest(?) parent
-    ${parent_relative_buttons_location}=    Set Variable    xpath=//div[@class="wp-block-buttons em-radiobutton-select__buttons"]/div/div/button
-    @{buttons}=    Get WebElements    ${parent_relative_buttons_location}
+    ${parent_relative_buttons_location}=    Set Variable    xpath=//div[@class="wp-block-buttons em-radiobutton-select__buttons"]/div
+    ${articles}=    Set Variable    xpath=//div[@id="overflow-slider-1"] 
+
+    # Info
+    Sleep    2s
+    Scroll Element Into View    ${parent_relative_buttons_location}
+    ${button_text}=    Get Text    ${parent_relative_buttons_location}/div[1]/button
+    Click Button    ${parent_relative_buttons_location}/div[1]/button
+    Scroll Element Into View    ${articles}
+    Wait Until Element Is Visible    ${articles}/article[1]
+    Click Element    ${articles}//article[1]
+    Sleep    2s
+    Page Should Contain    ${button_text}
+    Page Should Contain    Make the Most of Your Time at HAMK – Join HAMKO and Your Campus Association!
+    Go Back
+
+    # News
+    Sleep    2s
+    Scroll Element Into View    ${parent_relative_buttons_location}
+    ${button_text}=    Get Text    ${parent_relative_buttons_location}/div[2]/button
+    Click Button    ${parent_relative_buttons_location}/div[2]/button
+    Scroll Element Into View    ${articles}
+    Wait Until Element Is Visible    ${articles}/article[1]
+    Click Element    ${articles}/article[1]
+    Sleep    2s
+    Page Should Contain    ${button_text}
+    Page Should Contain    Language Café Brings Locals and Internationals Together for the Third Year
+    Go Back
+
+    # Press releases
+    Sleep    2s
+    Scroll Element Into View    ${parent_relative_buttons_location}
+    ${button_text}=    Get Text    ${parent_relative_buttons_location}/div[3]/button
+    Click Button    ${parent_relative_buttons_location}/div[3]/button
+    Scroll Element Into View    ${articles}
+    Wait Until Element Is Visible    ${articles}/article[1]
+    Click Element    ${articles}/article[1]
+    Sleep    2s
+    Page Should Contain    ${button_text}
+    Page Should Contain    New degree programme responds to the growing demand in defence industry 
+    Go Back
+
+    # Stories
+    Sleep    2s
+    Scroll Element Into View    ${parent_relative_buttons_location}
+    ${button_text}=    Get Text    ${parent_relative_buttons_location}/div[4]/button
+    Click Button    ${parent_relative_buttons_location}/div[4]/button
+    Scroll Element Into View    ${articles}
+    Wait Until Element Is Visible    ${articles}/article[1]
+    Click Element    ${articles}/article[1]
+    Sleep    2s
+    Page Should Contain    ${button_text}
+    Page Should Contain    Internship Insights: My Time at HAMK Career Services
+    Go Back
+
+    # Student voice
+    Sleep    2s
+    Scroll Element Into View    ${parent_relative_buttons_location}
+    ${button_text}=    Get Text    ${parent_relative_buttons_location}/div[5]/button
+    Click Button    ${parent_relative_buttons_location}/div[5]/button
+    Scroll Element Into View    ${articles}
+    Wait Until Element Is Visible    ${articles}/article[1]
+    Click Element    ${articles}/article[1]
+    Sleep    2s
+    Page Should Contain    ${button_text}
+    Page Should Contain    How is it like to absolve Aalto Product Development Project? – A student assistant perspective
+    Go Back
+
+
+
 
     # testing each button through loop
-    FOR    ${button}    IN    @{buttons}
-        Sleep    2s
-        Scroll Element Into View    ${button}
-        Click Button    ${button}
+    # FOR    ${button}    IN    @{buttons}
+    #     Sleep    2s
+    #     Scroll Element Into View    ${button}
+    #     Click Button    ${button}
 
-        # save variable to confirm
-        ${button_text}=    Get Text    ${button}
-        Log To Console    ${button_text}
+    #     # save variable to confirm
+    #     ${button_text}=    Get Text    ${button}
+    #     Log To Console    ${button_text}
         
-        # targeting first the article container, then selecting first article link.
-        # the xpath index starts from 1, not 0.
-        ${article_container}=    Set Variable    div[@id="overflow-slider-1"]
-        Wait Until Element Is Visible    xpath=(//${article_container}//article)[1]
-        Click Element    xpath=(//${article_container}//article)[1]
+    #     # targeting first the article container, then selecting first article link.
+    #     # the xpath index starts from 1, not 0.
+    #     ${article_container}=    Set Variable    div[@id="overflow-slider-1"]
+    #     Wait Until Element Is Visible    xpath=(//${article_container}//article)[1]
+    #     Click Element    xpath=(//${article_container}//article)[1]
         
-        Page Should Contain    ${button_text}
-        Go Back
-    END
+    #     Page Should Contain    ${button_text}
+    #     Go Back
+    # END
+
+
     
     
 Test search feature from main page: "services"
