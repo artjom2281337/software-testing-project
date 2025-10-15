@@ -225,3 +225,48 @@ Test navigation to contact page
     Sleep    2s
     ${lecturer_name}=    Get Text    xpath=//div[@class="wp-block-column"]/h1
     Should Be Equal    ${lecturer_name}    Jawad Yasin
+
+Test come to study and visit Computer Applications
+
+    # Navigate to hamk homepage if not there
+    ${current_url}=    Get Location
+    ${expected_url}=    Catenate    SEPARATOR=    ${url}    en/
+    IF    $expected_url != $current_url
+        Go to hamk homepage
+    END    
+    
+    # Wait until hamk homepage loaded
+    Sleep    2s
+    # opening come to study menu
+    Wait Until Element Is Visible    xpath=//button[@data-menu="sub-toggle" and .//span[normalize-space(.)="Come to Study"]]    10s
+    Click Element    xpath=//button[@data-menu="sub-toggle" and .//span[normalize-space(.)="Come to Study"]]
+    
+    # go to search study options
+    Wait Until Element Is Visible    xpath=//a[.//span[normalize-space(.)='Search Study Options']]    15s
+    Click Element                    xpath=//a[.//span[normalize-space(.)='Search Study Options']]
+    Wait For Condition               return document.readyState=="complete"
+
+    # search course name
+    Wait Until Element Is Visible    xpath=//input[contains(@placeholder," Search with a search term")]    10s
+    Click Element    xpath=//input[contains(@placeholder," Search with a search term")]
+    Clear Element Text    xpath=//input[contains(@placeholder," Search with a search term")]
+    Input Text    xpath=//input[contains(@placeholder," Search with a search term")]    computer applications
+    Sleep    2s
+
+    # open filters
+    Click Element    xpath=//button[.//span[normalize-space(.)="Avaa suodattimet"]]
+    
+    # select IT & ICT
+    Wait Until Element Is Visible    xpath=//label[normalize-space(.)="IT and ICT"]    10s
+    Scroll Element Into View         xpath=//label[normalize-space(.)="IT and ICT"]
+    Click Element                    xpath=//label[normalize-space(.)="IT and ICT"]
+
+    # select computer applications in IT & ICT
+    Wait Until Element Is Visible    xpath=//label[normalize-space(.)="Computer Applications"]    10s
+    Scroll Element Into View         xpath=//label[normalize-space(.)="Computer Applications"]
+    Click Element                    xpath=//label[normalize-space(.)="Computer Applications"]
+
+    # open computer applicatons
+    Wait Until Element Is Visible    xpath=//a[contains(@href,"/degree/computer-applications")]    15s
+    Scroll Element Into View         xpath=//a[contains(@href,"/degree/computer-applications")]
+    Click Link                       xpath=//a[contains(@href,"/degree/computer-applications")]
