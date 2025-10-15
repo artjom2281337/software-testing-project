@@ -19,7 +19,10 @@ Handle cookies and switch to english
     Click Element    xpath=//a[text()="English"]
 
     Sleep    1s
-    Click Button    xpath=//button[text()="Allow all cookies"]
+    ${cookies_exist}=    Run Keyword And Return Status    Element Should Be Visible    xpath=//button[text()="Allow all cookies"]
+    IF    ${cookies_exist}
+        Click Button    xpath=//button[text()="Allow all cookies"]
+    END
 
 Go to hamk homepage
     Go To    ${url}
