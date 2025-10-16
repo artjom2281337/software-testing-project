@@ -270,3 +270,67 @@ Test come to study and visit Computer Applications
     Wait Until Element Is Visible    xpath=//a[contains(@href,"/degree/computer-applications")]    15s
     Scroll Element Into View         xpath=//a[contains(@href,"/degree/computer-applications")]
     Click Link                       xpath=//a[contains(@href,"/degree/computer-applications")]
+
+Test the prices showing up correctly in the hamk shop
+    
+    # Navigate to hamk homepage if not there
+    ${current_url}=    Get Location
+    ${expected_url}=    Catenate    SEPARATOR=    ${url}    en/
+    IF    $expected_url != $current_url
+        Go to hamk homepage
+    END  
+
+    # Find the shop button
+    ${shop_button}=    Get WEbElement    xpath=//a[@href="https://shop.hamk.fi/"]
+    Scroll Element Into View    ${shop_button}
+    Sleep    0.5s
+
+    # Go to the shop
+    Click Element    ${shop_button}
+
+    # Check if you are in the shop
+    Page Should Contain    HAMK Shop
+    Page Should Contain    Latest Products
+
+    # Handle cookies if they show up
+    ${cookie_button}=    Set Variable    xpath=//button[@class="cky-btn cky-btn-accept"]
+    ${cookie_exists}=    Run Keyword And Return Status    Element Should Be Visible    ${cookie_button}
+    IF    ${cookie_exists}
+        Click Button    ${cookie_button}
+    END
+
+    # Go to the products page
+    ${product_page_button}=    Get WebElement    xpath=//a[contains(@href,"https://shop.hamk.fi/tuote-osasto/hamk-products/")]
+    Click Element    ${product_page_button}
+    
+    # Get the products
+    ${product_path}=    Set Variable    xpath=//main/ul[@class="products columns-3"]/li
+    ${product}=    Get WebElement    ${product_path}
+    Scroll Element Into View    ${product}
+    Sleep    0.5s
+
+    # Price and name for checking later
+    ${product_price}=    Get Text    ${product_path}/a/span/span
+    ${product_price}=    Split String    ${product_price}         
+    ${product_price}=    Get From List    ${product_price}    0
+    ${product_name}=    Get Text    ${product_path}/a/h2
+    
+    # Go to the product page
+    Click Element    ${product}
+    Sleep    0.5s
+
+    # Check if it is the correct product and that the price is the same
+    Page Should Contain    ${product_name}
+    Page Should Contain    ${product_price}
+
+    # Add proruct to the cart
+    Click Button    xpath=//button[text()="Add to cart"]
+    Sleep    2s
+
+    # Go to the cart
+    Click Element    xpath=//a[contains(@href,"https://shop.hamk.fi/cart/")]
+
+    # Check that you are in the cart and that the product is there with the correct price
+    Page Should Contain    Cart
+    Page Should Contain    ${product_name}
+    Page Should Contain    ${product_price}
