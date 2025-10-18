@@ -8,14 +8,6 @@ Suite Setup    Open browser and go to hamk.fi
 *** Variables ***
 ${url}    https://www.hamk.fi/
 
-# test 6 variables
-${come_to_study_BTN}    xpath=//button[@data-menu="sub-toggle" and .//span[normalize-space(.)="Come to Study"]]
-${search_study_BTN}    xpath=//a[.//span[normalize-space(.)='Search Study Options']]
-${search_field}    xpath=//input[contains(@placeholder," Search with a search term")]
-${IT_ICT_BTN}   xpath=//label[normalize-space(.)="IT and ICT"] 
-${CA_option}    xpath=//label[normalize-space(.)="Computer Applications"]
-${CA_card}    xpath=//a[contains(@href,"/degree/computer-applications")]
-
 *** Keywords ***
 Open browser and go to hamk.fi
     Open Browser    ${url}    chrome
@@ -244,38 +236,38 @@ Test come to study and visit Computer Applications
     END    
     
     # opening come to study menu
-    Wait Until Element Is Visible    ${come_to_study_BTN}    10s
-    Click Element               ${come_to_study_BTN}
+    Wait Until Element Is Visible   xpath=//button[@data-menu="sub-toggle" and .//span[normalize-space(.)="Come to Study"]]    10s
+        Click Element   xpath=//button[@data-menu="sub-toggle" and .//span[normalize-space(.)="Come to Study"]]
 
     # go to search study options
-    Wait Until Element Is Visible    ${search_study_BTN}    15s
-    Click element                    ${search_study_BTN}
+    Wait Until Element Is Visible   xpath=//a[.//span[normalize-space(.)='Search Study Options']]    15s
+    Click element   xpath=//a[.//span[normalize-space(.)='Search Study Options']]
 
     # search course name
-    Wait Until Element Is Visible    ${search_field}    10s
-    Scroll Element Into View        ${search_field}
-    Click Element                    ${search_field} 
-    Clear Element Text                ${search_field} 
-    Input Text                        ${search_field}     computer applications
+    Wait Until Element Is Visible   xpath=//input[contains(@placeholder," Search with a search term")]    10s
+    Scroll Element Into View    xpath=//input[contains(@placeholder," Search with a search term")]
+    Click Element   xpath=//input[contains(@placeholder," Search with a search term")]
+    Clear Element Text    xpath=//input[contains(@placeholder," Search with a search term")] 
+    Input Text      xpath=//input[contains(@placeholder," Search with a search term")]     computer applications
     Sleep    2s
 
     # open filters
     Click Element    xpath=//button[contains(@class,"hamk-checkboxbutton-select__toggle")]
     
     # select IT & ICT
-    Wait Until Element Is Visible       ${IT_ICT_BTN}    10s
-    Scroll Element Into View         ${IT_ICT_BTN}
-    Click Element               ${IT_ICT_BTN}
+    Wait Until Element Is Visible   xpath=//label[normalize-space(.)="IT and ICT"]     10s
+    Scroll Element Into View    xpath=//label[normalize-space(.)="IT and ICT"] 
+    Click Element   xpath=//label[normalize-space(.)="IT and ICT"] 
 
     # select computer applications in IT & ICT
-    Wait Until Element Is Visible       ${CA_option}    10s
-    Scroll Element Into View         ${CA_option}
-    Click Element               ${CA_option}
+    Wait Until Element Is Visible   xpath=//label[normalize-space(.)="Computer Applications"]    10s
+    Scroll Element Into View    xpath=//label[normalize-space(.)="Computer Applications"]
+    Click Element   xpath=//label[normalize-space(.)="Computer Applications"]
 
     # open computer applicatons
-    Wait Until Element Is Visible   ${CA_card}   15s
-    Scroll Element Into View        ${CA_card}
-    Click Link                      ${CA_card}
+    Wait Until Element Is Visible   xpath=//a[contains(@href,"/degree/computer-applications")]   15s
+    Scroll Element Into View    xpath=//a[contains(@href,"/degree/computer-applications")]
+    Click Link  xpath=//a[contains(@href,"/degree/computer-applications")]
 
 Test the prices showing up correctly in the hamk shop
     
@@ -354,20 +346,52 @@ Test mobile and navbar accessibility
     Set Window Size    375    800
 
     # open navbar
-    Wait Until Element Is Visible    xpath=//span[contains(@class,'menu-toggle__icon')]    5s
-    Click Element               xpath=//span[contains(@class,'menu-toggle__icon')]
+    Wait Until Element Is Visible   xpath=//span[contains(@class,'menu-toggle__icon')]    5s
+    Click Element   xpath=//span[contains(@class,'menu-toggle__icon')]
     Sleep    1s
 
     # click come to study
     Click Element   xpath=//div[contains(@class,'header-menu-mobile')]//button[@data-menu='sub-toggle' and .//span[normalize-space(.)='Come to Study']]
-    Wait Until Element Is Visible    xpath=//ul[@id='sub-menu-1-0']//button[contains(@class,'js-sub-menu-close')]   10s
-    Click Element               xpath=//ul[@id='sub-menu-1-0']//button[contains(@class,'js-sub-menu-close')]
+    Wait Until Element Is Visible   xpath=//ul[@id='sub-menu-1-0']//button[contains(@class,'js-sub-menu-close')]   10s
+    Click Element   xpath=//ul[@id='sub-menu-1-0']//button[contains(@class,'js-sub-menu-close')]
     Sleep    0.5s
     # click cooperation and services
-    Click Element       xpath=//div[contains(@class,'header-menu-mobile')]//button[@data-menu='sub-toggle' and .//span[normalize-space(.)='Cooperation and Services']]
-    Wait Until Element Is Visible       xpath=//ul[@id='sub-menu-1-1']//button[contains(@class,'js-sub-menu-close')]    10s
-    Click Button        xpath=//ul[@id='sub-menu-1-1']//button[contains(@class,'js-sub-menu-close')]
+    Click Element   xpath=//div[contains(@class,'header-menu-mobile')]//button[@data-menu='sub-toggle' and .//span[normalize-space(.)='Cooperation and Services']]
+    Wait Until Element Is Visible   xpath=//ul[@id='sub-menu-1-1']//button[contains(@class,'js-sub-menu-close')]    10s
+    Click Button    xpath=//ul[@id='sub-menu-1-1']//button[contains(@class,'js-sub-menu-close')]
     
     # close the nav 
     Press Keys      xpath=//body    ESCAPE
     Maximize Browser Window
+
+Test Hamk events
+    # Navigate to hamk homepage if not there
+    ${current_url}=    Get Location
+    ${expected_url}=    Catenate    SEPARATOR=    ${url}    en/
+    IF    $expected_url != $current_url
+        Go to hamk homepage
+    END 
+
+    # go to check out our research page
+    Wait Until Element Is Visible   xpath=//a[normalize-space(.)="Check out our research"]    15s
+    Scroll Element Into View    xpath=//a[normalize-space(.)="Check out our research"]
+    Click Element   xpath=//a[normalize-space(.)="Check out our research"] 
+
+    # click on More events button
+    Wait Until Element Is Visible   xpath=//a[contains(@href,"/tapahtuma/")]    15s
+    Scroll Element Into View    xpath=//a[contains(@href,"/tapahtuma/")]
+    Wait Until Element Is Enabled   xpath=//a[contains(@href,"/tapahtuma/")]    5s
+    Click Element   xpath=//a[contains(@href,"/tapahtuma/")] 
+
+    # using for loop to make the robot click next button for higest 4 times if button is available 
+    ${next_btn}=    Set Variable    xpath=//a[contains(@class,'next') and contains(@class,'page-numbers')]
+    FOR    ${i}    IN RANGE    4
+        ${count}=   Get Element Count   ${next_btn}
+        IF  ${count} == 0
+            Exit For Loop
+        END
+        Scroll Element Into View    ${next_btn}
+        Click Element   ${next_btn}
+        Wait For Condition  return document.readyState=="complete"
+    END
+
