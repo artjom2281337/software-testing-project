@@ -25,9 +25,13 @@ Handle cookies and switch to english
     END
 
 Go to hamk homepage
-    Go To    ${url}
-    Wait For Condition    return document.readyState=="complete"
-    Handle cookies and switch to english
+    ${current_url}=    Get Location
+    ${expected_url}=    Catenate    SEPARATOR=    ${url}    en/
+    IF    $expected_url != $current_url
+        Go To    ${url}
+        Wait For Condition    return document.readyState=="complete"
+        Handle cookies and switch to english
+    END  
 
 *** Test Cases ***
 Test “Latest News” section articles
@@ -165,11 +169,7 @@ Test search feature from main page: "services"
 Test screenshot of the first picture in article
     
     # Navigate to hamk homepage if not there
-    ${current_url}=    Get Location
-    ${expected_url}=    Catenate    SEPARATOR=    ${url}    en/
-    IF    $expected_url != $current_url
-        Go to hamk homepage
-    END    
+    Go to hamk homepage  
     
     # Wait until hamk homepage loaded
     Sleep    2s
@@ -229,11 +229,7 @@ Test navigation to contact page
 Test come to study and visit Computer Applications
 
     # Navigate to hamk homepage if not there
-    ${current_url}=    Get Location
-    ${expected_url}=    Catenate    SEPARATOR=    ${url}    en/
-    IF    $expected_url != $current_url
-        Go to hamk homepage
-    END    
+    Go to hamk homepage  
     
     # opening come to study menu
     Wait Until Element Is Visible   xpath=//button[@data-menu="sub-toggle" and .//span[normalize-space(.)="Come to Study"]]    10s
@@ -272,14 +268,10 @@ Test come to study and visit Computer Applications
 Test the prices showing up correctly in the hamk shop
     
     # Navigate to hamk homepage if not there
-    ${current_url}=    Get Location
-    ${expected_url}=    Catenate    SEPARATOR=    ${url}    en/
-    IF    $expected_url != $current_url
-        Go to hamk homepage
-    END  
+    Go to hamk homepage
 
     # Find the shop button
-    ${shop_button}=    Get WEbElement    xpath=//a[@href="https://shop.hamk.fi/"]
+    ${shop_button}=    Get WebElement    xpath=//a[@href="https://shop.hamk.fi/"]
     Scroll Element Into View    ${shop_button}
     Sleep    0.5s
 
@@ -336,11 +328,7 @@ Test the prices showing up correctly in the hamk shop
 Test mobile and navbar accessibility
 
     # Navigate to hamk homepage if not there
-    ${current_url}=    Get Location
-    ${expected_url}=    Catenate    SEPARATOR=    ${url}    en/
-    IF    $expected_url != $current_url
-        Go to hamk homepage
-    END 
+    Go to hamk homepage
 
     # setting browser to mobile size
     Set Window Size    375    800
@@ -365,12 +353,9 @@ Test mobile and navbar accessibility
     Maximize Browser Window
 
 Test Hamk events
+
     # Navigate to hamk homepage if not there
-    ${current_url}=    Get Location
-    ${expected_url}=    Catenate    SEPARATOR=    ${url}    en/
-    IF    $expected_url != $current_url
-        Go to hamk homepage
-    END 
+    Go to hamk homepage
 
     # go to check out our research page
     Wait Until Element Is Visible   xpath=//a[normalize-space(.)="Check out our research"]    15s
@@ -395,3 +380,43 @@ Test Hamk events
         Wait For Condition  return document.readyState=="complete"
     END
 
+Test links in the footer of the homepage
+
+    # Navigate to hamk homepage if not there
+    Go to hamk homepage
+
+    # Scroll the foother into the view
+    Scroll Element Into View    xpath=//footer
+
+    # Get the links from the footer
+    @{links}=    Get WebElements    xpath=//ul[@id="menu-footer-primary-menu-eng"]/li/a
+    ${length}=    Get Length    ${links}
+
+    # Tets each link
+    FOR    ${index}    IN RANGE    0    ${length}
+        Wait For Condition    return document.readyState == "complete"
+        Sleep    1s
+        ${link}=    Get From List    ${links}    ${index}
+        ${link_text}=    Get Text    ${link}
+        Click Element    ${link}
+        Sleep    2s
+        Page Should Contain    ${link_text}
+        Go Back
+    END
+
+    # Get social links
+    @{social_links}=    Get WebElements    xpath=//ul[@class="social-media-links__list"]/li/a
+    ${social_length}=    Get Length    ${social_links}
+
+    # Test each social link
+    FOR    ${index}    IN RANGE    0    ${social_length}
+        Wait For Condition    return document.readyState == "complete"
+        Sleep    1s
+        ${link}=    Get From List    ${social_links}    ${index}
+        ${link_text}=    Get Text    ${link}
+        ${link_text}=    Convert To Lower Case    ${link_text}
+        Click Element    ${link}
+        Sleep    2s
+        Location Should Contain    ${link_text}
+        Go Back
+    END
