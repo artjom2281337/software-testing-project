@@ -104,34 +104,7 @@ Test “Latest News” section articles
     Sleep    2s
     Page Should Contain    ${button_text}
     Page Should Contain    How is it like to absolve Aalto Product Development Project? – A student assistant perspective
-    Go Back
-
-
-
-
-    # testing each button through loop
-    # FOR    ${button}    IN    @{buttons}
-    #     Sleep    2s
-    #     Scroll Element Into View    ${button}
-    #     Click Button    ${button}
-
-    #     # save variable to confirm
-    #     ${button_text}=    Get Text    ${button}
-    #     Log To Console    ${button_text}
-        
-    #     # targeting first the article container, then selecting first article link.
-    #     # the xpath index starts from 1, not 0.
-    #     ${article_container}=    Set Variable    div[@id="overflow-slider-1"]
-    #     Wait Until Element Is Visible    xpath=(//${article_container}//article)[1]
-    #     Click Element    xpath=(//${article_container}//article)[1]
-        
-    #     Page Should Contain    ${button_text}
-    #     Go Back
-    # END
-
-
-    
-    
+    Go Back  
 Test search feature from main page: "services"
     Sleep    3s
 
