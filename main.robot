@@ -77,7 +77,7 @@ Test “Latest News” section articles
     Click Element    ${articles}/article[1]
     Sleep    2s
     Page Should Contain    ${button_text}
-    Page Should Contain    New degree programme responds to the growing demand in defence industry 
+    Page Should Contain    HAMK graduates in September 2025 
     Go Back
 
     # Stories
